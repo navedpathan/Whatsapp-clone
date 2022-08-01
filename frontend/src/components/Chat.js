@@ -8,23 +8,25 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InsertEmoticon from '@mui/icons-material/InsertEmoticon';
 import MicIcon from '@mui/icons-material/Mic';
 import axios from '../db/axios';
+import { useStateValue } from '../redux/StateProvider';
 
 const Chat = ({ messages }) => {
 
   const [ seed, setSeed ] = useState("");
+  const [input, setInput] = useState("");
+  const [{user}, dispatch] = useStateValue();
 
   useEffect(() => {
     setSeed(Math.floor(Math.random() * 5000));
   }, []);
 
-  const [input, setInput] = useState("");
 
   const sendMessage = async (e) => {
     e.preventDefault();
 
     await axios.post('/messages/new', {
       message: input,
-      name: 'Naved',
+      name: user.displayName,
       timestamp: new Date().toLocaleString(),
       received: true
     });
@@ -37,8 +39,9 @@ const Chat = ({ messages }) => {
       <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`}/>
 
         <div className="chat_headerInfo">
-          <h3>Room name</h3>
-          <p>Last seen at...</p>
+          <h3>Room Name</h3>
+          <p>Last seen {' '}
+          {messages[messages.length - 1]?.timestamp}</p>
         </div>
 
         <div className="chat_headerRight">
@@ -56,7 +59,7 @@ const Chat = ({ messages }) => {
 
       <div className="chat_body">
         {messages.map((message) => (
-          <p className={`chat_msg ${message.received && 'chat_receiver'}`}>
+          <p className={`chat_msg ${message.name === user.displayName && 'chat_receiver'}`}>
             <span className="chat_name">{message.name}</span>
             {message.message}
             <span className="chat_timestamp">

@@ -1,14 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
 import Sidebar from './components/Sidebar';
 import Chat from './components/Chat';
 import { useEffect, useState } from 'react';
 import Pusher from 'pusher-js';
 import axios from './db/axios';
+import Login from './components/Login';
+import { useStateValue } from './redux/StateProvider';
 
 function App() {
 
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState([]);
+  const [{user}, dispatch] = useStateValue(null);
 
   useEffect(() => {
     axios.get('/messages/sync')
@@ -35,10 +37,12 @@ function App() {
 
   return (
     <div className="App">
+        { !user ? <Login/> : (
       <div className="app_body">
-        <Sidebar />
-        <Chat messages={messages} />
+          <Sidebar messages={messages}/>
+          <Chat messages={messages} />
       </div>
+        )}
     </div>
   );
 }

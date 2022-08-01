@@ -4,17 +4,17 @@ import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import ChatIcon from '@mui/icons-material/Chat';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Avatar, IconButton } from '@mui/material';
-import pic from '../images/avtpic.jpg';
 import SearchIcon from '@mui/icons-material/Search';
 import SidebarChat from './SidebarChat';
+import { useStateValue } from '../redux/StateProvider';
 
-const Sidebar = () => {
+const Sidebar = ({messages}) => {
+  const [{user}, dispatch] = useStateValue();
     
     return (
         <div className='sidebar'>
             <div className="sb_header">
-                <Avatar src={pic}/>
-                <span className='username'></span>
+                <Avatar src={user?.photoURL} />
                 <div className="sb_headerRight">
                     <IconButton>
                         <DonutLargeIcon />
@@ -36,9 +36,7 @@ const Sidebar = () => {
             </div>
 
             <div className="sb_chats">
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
+                <SidebarChat messages={messages} />
             </div>
         </div>
     )

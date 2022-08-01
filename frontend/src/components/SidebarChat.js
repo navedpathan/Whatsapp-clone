@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import '../css/SidebarChat.css'
 // import db from '../db/firebase';
 
-const SidebarChat = ({ addNewChat }) => {
+const SidebarChat = ({messages}) => {
 
   const [ seed, setSeed ] = useState("");
 
@@ -11,22 +11,13 @@ const SidebarChat = ({ addNewChat }) => {
     setSeed(Math.floor(Math.random() * 5000));
   }, []);
   
-  const createChat = () => {
-    const roomName = prompt('Please enter name for chat');
-    
-  };
-  
-  return !addNewChat ? (
+  return (
     <div className='sbChat'>
         <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`}/>
         <div className="sbChat_info">
-        <h2>Room name</h2>
-        <p>this is my last msg</p>
+        <h2>Room Name</h2>
+        <p>{messages[messages.length - 1]?.message}</p>
         </div>
-    </div>
-  ) : (
-    <div onClick={createChat} className="sbChat">
-      <h2>Add new chat</h2>
     </div>
   )
 }
